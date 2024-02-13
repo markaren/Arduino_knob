@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "json.hpp"
 #include "MovingAverageFilter.hpp"
+#include "json.hpp"
 #include <serial/serial.h>
 #include <threepp/loaders/SVGLoader.hpp>
 #include <threepp/threepp.hpp>
@@ -65,6 +65,11 @@ int main() {
         renderer.setSize(size);
     });
 
+    auto circleGeometry = CircleGeometry::create(50, 32);
+    auto circle = Mesh::create(circleGeometry, MeshBasicMaterial::create({{"color", Color::red}}));
+    circle->position.set(600, 400, 0);
+    scene.add(circle);
+
     auto svg1 = loadSVG();
     auto knob1 = svg1->getObjectByName("knob");
     scene.add(svg1);
@@ -85,12 +90,18 @@ int main() {
                 nlohmann::json j = nlohmann::json::parse(line);
                 float p1 = j["potVal1"].get<float>();
                 float p2 = j["potVal2"].get<float>();
+                int buttonPressed = j["buttonPressed"].get<int>();
+                if (buttonPressed) {
+                    circle->material()->as<MaterialWithColor>()->color.randomize();
+                }
 
                 filter.update(p1);
 
                 knob1->rotation.z = math::mapLinear(filter.value(), 0, 1023, math::PI, math::PI * 2) + math::degToRad(45);
                 knob2->rotation.z = math::mapLinear(p2, 0, 1023, math::PI, math::PI * 2) + math::degToRad(45);
-            } catch (const std::exception &) {}
+            } catch (const std::exception &ex) {
+                std::cout << ex.what() << std::endl;
+            }
         }
 
         renderer.render(scene, camera);
