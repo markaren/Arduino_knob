@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.19)
 project(arduino_knob)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/knob.svg DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin/)
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/resources/knob.svg" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/bin/")
 
 include(FetchContent)
 set(THREEPP_BUILD_TESTS OFF)
@@ -28,4 +28,4 @@ FetchContent_MakeAvailable(serial)
 
 add_executable(arduino_knob main.cpp)
 target_link_libraries(arduino_knob PRIVATE threepp::threepp serial)
-target_include_directories(arduino_knob PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(arduino_knob PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
