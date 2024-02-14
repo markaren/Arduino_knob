@@ -18,7 +18,7 @@ void setup() {
     pinMode(PIN2, INPUT);
     attachInterrupt(digitalPinToInterrupt(PIN2), buttonInterrupt, FALLING);
 
-    Serial.begin(9600);
+    Serial.begin(115200);
 }
 
 void loop() {
