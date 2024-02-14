@@ -79,7 +79,7 @@ int main() {
     auto knob2 = svg2->getObjectByName("knob");
     scene.add(svg2);
 
-    serial::Serial serial("COM4", 9600, serial::Timeout::simpleTimeout(1000));
+    serial::Serial serial("COM4", 115200, serial::Timeout::simpleTimeout(1000));
 
     Clock clock;
     MovingAverageFilter filter(5);
