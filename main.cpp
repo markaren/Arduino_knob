@@ -46,7 +46,14 @@ namespace {
 
 }// namespace
 
-int main() {
+int main(int argc, char** argv) {
+
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <port>" << std::endl;
+        return 1;
+    }
+
+    std::string port(argv[1]);
 
     Canvas canvas("Knob", {{"aa", 4}});
     GLRenderer renderer(canvas.size());
@@ -79,7 +86,7 @@ int main() {
     auto knob2 = svg2->getObjectByName("knob");
     scene.add(svg2);
 
-    serial::Serial serial("COM4", 115200, serial::Timeout::simpleTimeout(1000));
+    serial::Serial serial(port, 115200, serial::Timeout::simpleTimeout(1000));
 
     Clock clock;
     MovingAverageFilter filter(5);
