@@ -78,11 +78,13 @@ int main(int argc, char** argv) {
     scene.add(circle);
 
     auto svg1 = loadSVG();
+    svg1->children.back()->geometry()->rotateZ(math::degToRad(45));
     auto knob1 = svg1->getObjectByName("knob");
     scene.add(svg1);
 
     auto svg2 = loadSVG();
     svg2->position.y = 500;
+    svg2->children.back()->geometry()->rotateZ(math::degToRad(45));
     auto knob2 = svg2->getObjectByName("knob");
     scene.add(svg2);
 
@@ -104,8 +106,8 @@ int main(int argc, char** argv) {
 
                 filter.update(p1);
 
-                knob1->rotation.z = math::mapLinear(filter.value(), 0, 1023, math::PI, math::PI * 2) + math::degToRad(45);
-                knob2->rotation.z = math::mapLinear(p2, 0, 1023, math::PI, math::PI * 2) + math::degToRad(45);
+                knob1->rotation.z = math::mapLinear(filter.value(), 0, 1023, math::PI, math::PI * 2);
+                knob2->rotation.z = math::mapLinear(p2, 0, 1023, math::PI, math::PI * 2);
             } catch (const std::exception &ex) {
                 std::cout << ex.what() << std::endl;
             }
