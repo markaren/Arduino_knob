@@ -1,13 +1,13 @@
 #include "ArduinoJson.hpp"
 #include <Arduino.h>
 
-#include "Potpin.hpp"
+#include "AnalogPin.hpp"
 
 using namespace ArduinoJson;
 
 namespace {
-    Potpin p1(A0);
-    Potpin p2(A1);
+    AnalogPin p1(A0);
+    AnalogPin p2(A1);
 
     volatile bool buttonPressed{false};
 }// namespace
