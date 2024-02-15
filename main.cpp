@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
 
     auto circleGeometry = CircleGeometry::create(50, 32);
     auto circle = Mesh::create(circleGeometry, MeshBasicMaterial::create({{"color", Color::red}}));
-    circle->position.set(600, 400, 0);
+    circle->position.set(500, 400, 0);
     scene.add(circle);
 
     auto svg1 = loadSVG();
@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
     MovingAverageFilter filter(5);
     canvas.animate([&]() {
         if (knob1 && serial.isOpen() && serial.available()) {
-            auto line = serial.readline();
+            const auto line = serial.readline();
             try {
                 nlohmann::json j = nlohmann::json::parse(line);
                 float p1 = j["potVal1"].get<float>();
