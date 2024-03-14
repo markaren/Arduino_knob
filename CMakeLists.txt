@@ -13,7 +13,7 @@ set(THREEPP_BUILD_EXAMPLES OFF)
 FetchContent_Declare(
         threepp
         GIT_REPOSITORY https://github.com/markaren/threepp.git
-        GIT_TAG d1b1aefaed82b287f2b095857c27f062d6c1bc00
+        GIT_TAG 22b99e0526dbae254076a98881688c126521b4f5
 )
 FetchContent_MakeAvailable(threepp)
 
