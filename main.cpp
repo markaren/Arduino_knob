@@ -46,7 +46,7 @@ namespace {
 
 }// namespace
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
 
     if (argc != 2) {
         std::cerr << "Usage: " << argv[0] << " <port>" << std::endl;
@@ -54,6 +54,14 @@ int main(int argc, char** argv) {
     }
 
     std::string port(argv[1]);
+    std::unique_ptr<serial::Serial> serial;
+
+    try {
+        serial = std::make_unique<serial::Serial>(port, 115200, serial::Timeout::simpleTimeout(1000));
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
 
     Canvas canvas("Knob", {{"aa", 4}});
     GLRenderer renderer(canvas.size());
@@ -88,19 +96,17 @@ int main(int argc, char** argv) {
     auto knob2 = svg2->getObjectByName("knob");
     scene.add(svg2);
 
-    serial::Serial serial(port, 115200, serial::Timeout::simpleTimeout(1000));
 
     Clock clock;
     MovingAverageFilter filter(5);
     canvas.animate([&]() {
-        if (knob1 && serial.isOpen() && serial.available()) {
-            const auto line = serial.readline();
+        if (knob1 && serial->isOpen() && serial->available()) {
+            const auto line = serial->readline();
             try {
                 nlohmann::json j = nlohmann::json::parse(line);
-                float p1 = j["potVal1"].get<float>();
-                float p2 = j["potVal2"].get<float>();
-                int buttonPressed = j["buttonPressed"].get<int>();
-                if (buttonPressed) {
+                const auto p1 = j["potVal1"].get<float>();
+                const auto p2 = j["potVal2"].get<float>();
+                if (j["buttonPressed"].get<int>()) {
                     circle->material()->as<MaterialWithColor>()->color.randomize();
                 }
 
@@ -109,7 +115,7 @@ int main(int argc, char** argv) {
                 knob1->rotation.z = math::mapLinear(filter.value(), 0, 1023, math::PI, math::PI * 2);
                 knob2->rotation.z = math::mapLinear(p2, 0, 1023, math::PI, math::PI * 2);
             } catch (const std::exception &ex) {
-                std::cout << ex.what() << std::endl;
+                std::cerr << ex.what() << std::endl;
             }
         }
 
