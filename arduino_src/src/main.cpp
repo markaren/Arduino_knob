@@ -9,10 +9,14 @@ namespace {
     AnalogPin p1(A0);
     AnalogPin p2(A1);
 
+    StaticJsonDocument<24> doc;
+
     volatile bool buttonPressed{false};
 }// namespace
 
-void buttonInterrupt();
+void buttonInterrupt() {
+    buttonPressed = true;// Set the flag when the interrupt is triggered
+}
 
 void setup() {
     pinMode(PIN2, INPUT);
@@ -22,12 +26,9 @@ void setup() {
 }
 
 void loop() {
-    int potVal1 = p1.read();
-    int potVal2 = p2.read();
 
-    StaticJsonDocument<32> doc;
-    doc["potVal1"] = potVal1;
-    doc["potVal2"] = potVal2;
+    doc["potVal1"] = p1.read();
+    doc["potVal2"] = p2.read();
     doc["buttonPressed"] = buttonPressed ? 1 : 0;
     if (buttonPressed) {
         buttonPressed = false;
@@ -39,6 +40,4 @@ void loop() {
     delay(50);
 }
 
-void buttonInterrupt() {
-    buttonPressed = true;// Set the flag when the interrupt is triggered
-}
+
